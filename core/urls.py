@@ -18,7 +18,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
+token_patterns = [
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+]
 
 swagger_patterns = [
     path('', SpectacularAPIView.as_view(), name='schema'),
@@ -28,8 +36,10 @@ swagger_patterns = [
 api_v1_patterns = [
     path('admin/', admin.site.urls),
     path('schema/', include(swagger_patterns)),
+    path('tokens/', include(token_patterns)),
     path('books/', include('apps.books.urls')),
+    path('users/', include('apps.users.urls')),
 ]
 urlpatterns = [
-    path('api/v1/', include(api_v1_patterns)),
+    path('api/v1/', include(api_v1_patterns))
 ]
