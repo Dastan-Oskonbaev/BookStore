@@ -1,8 +1,12 @@
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, viewsets
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
+
+from apps.books.filters import BookFilter
 from apps.books.models import Book, Author
 from apps.books.serializers import BookSerializer, AuthorSerializer, BookCreateSerializer
 
@@ -39,15 +43,20 @@ from apps.books.serializers import BookSerializer, AuthorSerializer, BookCreateS
 #         return Response(serializer.data)
 
 
-class BookListView(generics.ListAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated]
+# class BookListView(generics.ListAPIView):
+#     queryset = Book.objects.all()
+#     serializer_class = BookSerializer
+#     # permission_classes = [IsAuthenticated]
+#     # filter_backends = [DjangoFilterBackend]
+#     # filterset_fields = ['title', 'pages']
+#     filterset_class = BookFilter
+#     filter_backends = [SearchFilter, DjangoFilterBackend]
+#     search_fields = ['title', 'author__name']
 
 
-class BookDetailView(generics.RetrieveAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
+# class BookDetailView(generics.RetrieveAPIView):
+#     queryset = Book.objects.all()
+#     serializer_class = BookSerializer
 
 
 class AuthorCreateView(generics.CreateAPIView):
@@ -55,12 +64,14 @@ class AuthorCreateView(generics.CreateAPIView):
     serializer_class = AuthorSerializer
 
 
-class BookCreateView(generics.CreateAPIView):
+# class BookCreateView(generics.CreateAPIView):
+#     queryset = Book.objects.all()
+#     serializer_class = BookCreateSerializer
+
+
+class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
-    serializer_class = BookCreateSerializer
-
-
-
+    serializer_class = BookSerializer
 
 
 

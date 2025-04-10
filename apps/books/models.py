@@ -17,6 +17,7 @@ class Book(models.Model):
     title = models.CharField(max_length=100)
     pages = models.IntegerField()
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
 
 
     def __str__(self):
